@@ -1,21 +1,12 @@
+import csv
+
 import streamlit as st
 
 
 def main():
+    projects = []
 
-    if "bg_color" not in st.session_state:
-        st.session_state.bg_color = "#ffffff11"
-
-    st.markdown(
-    f"""
-    <style>
-    .stApp {{
-        background-color: {st.session_state.bg_color};
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+    # region Intro
     st.header("Hi There! I'm C98!")
     st.write(
         "This is a place where I might post what I'm working on, and keeping it as a portfolio... That's kinda it..."
@@ -25,23 +16,64 @@ def main():
         st.write("This is a place where I might post what I'm working on, and keeping it as a portfolio... That's kinda it...")
         st.subheader("This is the code for the website so far:")""")
 
+    # endregion
+    # region Project Class
+    class Project:
+        def __init__(self, name, photo, link, time, ai_used):
+            self.name = name
+            self.photo = photo
+            self.time = time
+            self.link = link
+            self.ai_used = ai_used
 
-    st.session_state.bg_color = st.color_picker("Pick a color", key=1)
+        def display(self, column):
+            with column.container(border=True):
+                st.image(self.photo)
+                st.subheader(self.name)
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.link_button("View Code", self.link)
+                with col2:
+                    st.badge(label=self.time, icon=":material/schedule:")
+                if self.ai_used:
+                    st.badge(
+                        label="Ai Was Used", icon=":material/smart_toy:", color="red"
+                    )
+                elif self.ai_used == "help":
+                    st.badge(
+                        label="Ai help for research, NOT CODE.",
+                        icon=":material/help:",
+                        color="yellow",
+                    )
+                else:
+                    st.badge(
+                        label="100% Handwritten",
+                        icon=":material/code_xml:",
+                        color="green",
+                    )
 
-    if "bg_color" not in st.session_state:
-        st.session_state.bg_color = "#ffffff11"
+    # endregion
+    with open("projects.csv", newline="", encoding="utf-8") as file:
+        reader = csv.DictReader(file)
 
-    st.markdown(
-    f"""
-    <style>
-    .stApp {{
-        background-color: {st.session_state.bg_color};
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-    
+        for row in reader:
+            project = Project(
+                name=row["name"],
+                photo=row["photo"],
+                link=row["link"],
+                time=row["time"],
+                ai_used=row["ai_used"].strip().lower() == "yes",
+            )
+
+            projects.append(project)
+
+    for start in range(0, len(projects), 3):
+        columns = st.columns(3)
+
+        batch = projects[start : start + 3]
+
+        for column, project in zip(columns, batch):
+            project.display(column)
 
 
 if __name__ == "__main__":
