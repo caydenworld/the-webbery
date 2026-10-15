@@ -66,7 +66,7 @@ def main():
             )
 
             projects.append(project)
-
+    st.subheader("Projects I've Made So Far")
     for start in range(0, len(projects), 3):
         columns = st.columns(3)
 
