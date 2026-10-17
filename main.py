@@ -1,6 +1,7 @@
 import csv
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 
 def main():
@@ -15,6 +16,12 @@ def main():
     st.code("""st.header("Hi There! I'm C98!")
         st.write("This is a place where I might post what I'm working on, and keeping it as a portfolio... That's kinda it...")
         st.subheader("This is the code for the website so far:")""")
+    st.subheader("About Me")
+    st.write(
+        "I am Cayden! A 16y old who enjoys programming, digital art and learning new things! I'm into blender, Open Source and all things techy! Looking forward to working more on YSWSs, meeting new people and trying new things out!"
+    )
+    st.write("Hackatime Stats")
+    components.iframe("https://hackatime.hackclub.com/@c89", height=400, scrolling=True)
 
     # endregion
     # region Project Class
